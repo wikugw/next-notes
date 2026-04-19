@@ -11,11 +11,6 @@ import Toolbar from '@/components/Toolbar'
 
 const DEBOUNCE_MS = 600
 
-const MOBILE_SAFE_EXTENSIONS = {
-  dropcursor: false,
-  gapcursor: false,
-}
-
 export default function SharedNote({ noteId }: { noteId: string }) {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
@@ -25,7 +20,10 @@ export default function SharedNote({ noteId }: { noteId: string }) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure(MOBILE_SAFE_EXTENSIONS),
+      StarterKit.configure({
+        dropcursor: false as const,
+        gapcursor: false as const,
+      }),
       Placeholder.configure({ placeholder: 'Start writing…' }),
       TaskList,
       TaskItem.configure({ nested: true }),

@@ -17,14 +17,8 @@ type Props = {
 
 const DEBOUNCE_MS = 600
 
-const MOBILE_SAFE_EXTENSIONS = {
-  dropcursor: false,
-  gapcursor: false,
-}
-
 export default function NoteEditor({ noteId, readOnly = false }: Props) {
   const router = useRouter()
-  const [note, setNote] = useState<Note | null>(null)
   const [loading, setLoading] = useState(true)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved')
   const [isShared, setIsShared] = useState(false)
@@ -34,7 +28,10 @@ export default function NoteEditor({ noteId, readOnly = false }: Props) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure(MOBILE_SAFE_EXTENSIONS),
+      StarterKit.configure({
+        dropcursor: false as const,
+        gapcursor: false as const,
+      }),
       Placeholder.configure({ placeholder: 'Start writing…' }),
       TaskList,
       TaskItem.configure({ nested: true }),
@@ -62,7 +59,6 @@ export default function NoteEditor({ noteId, readOnly = false }: Props) {
     const load = async () => {
       const { data } = await supabase.from('notes').select('*').eq('id', noteId).single()
       if (!data) { router.replace('/'); return }
-      setNote(data)
       setIsShared(data.is_shared)
       setLoading(false)
       if (editor && data.content) {
