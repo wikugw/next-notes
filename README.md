@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Notes
 
-## Getting Started
+A personal iOS-style notes app with real-time sync, built with Next.js + Supabase + Tiptap. PWA-ready.
 
-First, run the development server:
+## Setup
+
+### 1. Install dependencies
+
+```bash
+npm install @supabase/supabase-js @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item
+```
+
+### 2. Set up Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Go to **SQL Editor** and run the contents of `supabase/schema.sql`
+3. Copy your project URL and anon key from **Settings → API**
+
+### 3. Configure environment
+
+```bash
+cp .env.local.example .env.local
+# Fill in your Supabase URL and anon key
+```
+
+### 4. Add PWA icons
+
+Add two PNG files to `/public`:
+- `icon-192.png` (192×192)
+- `icon-512.png` (512×512)
+
+You can generate them from any image at [favicon.io](https://favicon.io).
+
+### 5. Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Notes list** — sorted by last updated, swipe left to delete
+- **Rich editor** — bold, italic, headings, bullet lists, checklists
+- **Auto-save** — debounced, no save button needed
+- **Real-time sync** — changes propagate live to any open tab or device
+- **Share by URL** — tap share icon to make a note public and copy its link. Your wife can open `/notes/[id]` and edit live.
+- **PWA** — installable on iOS/Android, works offline for cached content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Routes
 
-## Learn More
+| Route | Description |
+|---|---|
+| `/` | Notes list |
+| `/notes/[id]` | Note editor (private) |
+| `/shared/[id]` | Shared note (anyone with link can edit) |
 
-To learn more about Next.js, take a look at the following resources:
+## Sharing flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Open a note
+2. Tap the share icon (top right) → link is copied to clipboard
+3. Send the link to your wife
+4. Both of you can edit the note simultaneously — changes sync in real-time
+5. Tap share icon again to make the note private (link stops working)
