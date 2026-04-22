@@ -15,7 +15,7 @@ type Props = {
   readOnly?: boolean
 }
 
-const DEBOUNCE_MS = 600
+const DEBOUNCE_MS = 2000
 
 export default function NoteEditor({ noteId, readOnly = false }: Props) {
   const router = useRouter()
